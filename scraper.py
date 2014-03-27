@@ -31,7 +31,36 @@ def convert_global_time(relative_time, half):
 
     global_time = 20.0 * (half - 1) + since_start_of_half
 
-    return global_time    
+    return global_time
+
+def make_uniform_time_intervals(events, times):
+    '''
+    Based on the game stored in <events>, make a new list of events (dictionaries)
+    with scores for each time in <times>
+
+    Useful for comparing games
+    '''
+    new_events = []
+
+    event_index = 0
+    cur_event = events[event_index]
+
+    for t in times:
+        while t > cur_event['time']:
+            # Move to the next event, if possible
+            if event_index < len(events) - 1:
+                event_index += 1
+                cur_event = events[event_index]
+            # Otherwise we've gone through every event
+            else:
+                break
+
+        # Copy cur_event, but set its time to be <t>
+        event = {k : v for k, v in cur_event.items()}
+        event['time'] = t
+        new_events.append(event)
+
+    return new_events
 
 def parse_team_names_and_rankings(soup):
     '''
@@ -72,7 +101,7 @@ def parse_game_urls(scoreboard_url=None):
 
     return [ESPN_BASE_URL + u for u in game_urls]
 
-def process_one_game(url, round_num):
+def process_one_game(url, round_num, time_intervals=None):
     '''
     Returns list of dictionaries storing events for game with play-by-play
     URL given by <url>
@@ -88,7 +117,6 @@ def process_one_game(url, round_num):
 
     # Store which team has "better" rank, i.e. a lower number
     home_higher_rank = home_rank < away_rank
-
 
     period = 1
     previous_away_score = 0
@@ -137,9 +165,12 @@ def process_one_game(url, round_num):
                 }
                 all_events.append(event)
 
-    return all_events
+    if time_intervals is None:
+        return all_events
+    else:
+        return make_uniform_time_intervals(all_events, time_intervals)
 
-def process_one_day(scoreboard_url, round_num):
+def process_one_day(scoreboard_url, round_num, time_intervals=None):
     '''
     Returns list of dictionaries containing events from all games linked to
     by <scoreboard_url> i.e. all the games played on given day
@@ -149,11 +180,11 @@ def process_one_day(scoreboard_url, round_num):
     # A list of dictionaries
     all_games = []
     for url in game_urls:
-        all_games += process_one_game(url, round_num)
+        all_games += process_one_game(url, round_num, time_intervals)
 
     return all_games
 
-def process_tournament(outfile='data/tournament_pbp.csv'):
+def process_tournament(outfile='data/tournament_pbp.csv', time_intervals=None):
     march = 20140300
     day_to_round = {
         20 : 2,
@@ -169,10 +200,12 @@ def process_tournament(outfile='data/tournament_pbp.csv'):
     all_games = []
     for day in days:
         day_url = NCAA_BASE_URL + '?date=' + str(march + day)
-        all_games += process_one_day(day_url, day_to_round[day])
+        all_games += process_one_day(day_url, day_to_round[day], time_intervals)
 
     df = pd.DataFrame(all_games)
     df.to_csv(outfile, index=False)
 
 if __name__ == '__main__':
-    process_tournament()
+    # From 0 --> 40.75
+    times = [.25 * t for t in range(4 * 41)]
+    process_tournament(time_intervals=times)
