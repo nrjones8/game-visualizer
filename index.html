@@ -1,33 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Game-Visualizer by nrjones8</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Game-Visualizer : " />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Game-Visualizer</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Game-Visualizer</h1>
-        <p></p>
 
-        <p class="view"><a href="https://github.com/nrjones8/game-visualizer">View the Project on GitHub <small>nrjones8/game-visualizer</small></a></p>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/nrjones8/game-visualizer">View on GitHub</a>
 
+          <h1 id="project_title">Game-Visualizer</h1>
+          <h2 id="project_tagline"></h2>
 
-        <ul>
-          <li><a href="https://github.com/nrjones8/game-visualizer/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/nrjones8/game-visualizer/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/nrjones8/game-visualizer">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/nrjones8/game-visualizer/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/nrjones8/game-visualizer/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <p>It's easy to miss games in the NCAA tournament (or any competition for that matter) -- wouldn't it be nice to know what the game "was like?" Was it close or a blowout? Maybe the favorite won by ten points, but was it a tight game before that? The goal here is to </p>
 
 <ol>
@@ -61,6 +64,8 @@ DAY,11,0,5,DAY-OSU,OSU,6,5,5,2,1.033
 
 <p>My original thought was simply to plot each game as a line and overlay all the games at once, i.e. put time on the x-axis and score differential on the y-axis (here's where the interactivity of Javascript would be perfect -- simply highlight a specific game and see more details about it, or zoom in on certain time periods). </p>
 
+<p><img src="https://raw.githubusercontent.com/nrjones8/game-visualizer/master/figures/timeline_rounds_2_3.png" alt=""></p>
+
 <ul>
 <li>Can't see individual games!</li>
 <li>Crowded lines </li>
@@ -72,9 +77,11 @@ DAY,11,0,5,DAY-OSU,OSU,6,5,5,2,1.033
 <li>"Fairness" of game -- how different are teams' ranks?</li>
 <li>Trajectory of game -- was it close, a blowout, or had sections of each?</li>
 </ul><h1>
-<a name="heatmap" class="anchor" href="#heatmap"><span class="octicon octicon-link"></span></a>Heatmap!</h1>
+<a name="heatmap" class="anchor" href="#heatmap"><span class="octicon octicon-link"></span></a>Heatmap</h1>
 
 <p>Which brings us to the heatmap, which is an awesome way to visualize many variables at once. The below heatmap does a much better job of capturing all the above aspects, though it requires a little more explanation. </p>
+
+<p><img src="https://raw.githubusercontent.com/nrjones8/game-visualizer/master/figures/heatmap_rounds_2_3.png" alt=""></p>
 
 <ul>
 <li>X-axis is still time</li>
@@ -83,12 +90,17 @@ DAY,11,0,5,DAY-OSU,OSU,6,5,5,2,1.033
 <li>The rows are ordered! As shown on the right side of the map, rows are grouped by the rank differential of the game -- games between teams with a rank differential of 3 are plotted together etc. Thus, in the bottom rows we would expect to see lots of blue (since the higher ranked team is <em>much higher</em> ranked). Any place we see red means an upset -- the lower the red is on the map, the more of an upset it was. </li>
 </ul>
       </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/nrjones8">nrjones8</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Game-Visualizer maintained by <a href="https://github.com/nrjones8">nrjones8</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+
     
+
   </body>
 </html>
