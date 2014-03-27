@@ -34,6 +34,10 @@ plot_timeline <- function(df) {
   print(g)
 }
 
+rank_diff_label <- function(variable, value) {
+  return(paste('RankDiff', value, sep=' : '))
+}  
+
 heatmap <- function(df, max_score=15) {
   df$rounded_diff_score <- sapply(df$diff_score, function(score) {
     ifelse(score > 0, min(score, max_score), max(score, -max_score))
@@ -46,8 +50,10 @@ heatmap <- function(df, max_score=15) {
     geom_tile(aes(fill = rounded_diff_score), color = 'white') +
     scale_fill_gradient2("Score Differential", low = 'red', high = 'blue') +
     # TODO add a label for facets
-    facet_grid(rank_diff ~ ., scales = 'free', space = 'free') +
+    facet_grid(rank_diff ~ ., scales = 'free', space = 'free', labeller=rank_diff_label) +
     theme_bw() +
+    # Horizontal text on the facet
+    theme(strip.text.y = element_text(size = 9, angle = 0)) +
     scale_x_continuous('Time') +
     scale_y_discrete('Teams') +
     ggtitle('NCAA 2014: Rounds 2 and 3')

@@ -208,4 +208,7 @@ def process_tournament(outfile='data/tournament_pbp.csv', time_intervals=None):
 if __name__ == '__main__':
     # From 0 --> 40.75
     times = [.25 * t for t in range(4 * 41)]
+    
+    # If no <time_intervals> argument is passed, events will be recorded at actual
+    # time in the play by play
     process_tournament(time_intervals=times)
