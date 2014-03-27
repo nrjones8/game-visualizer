@@ -172,7 +172,7 @@ def process_tournament(outfile='data/tournament_pbp.csv'):
         all_games += process_one_day(day_url, day_to_round[day])
 
     df = pd.DataFrame(all_games)
-    df.to_csv(outfile)
+    df.to_csv(outfile, index=False)
 
 if __name__ == '__main__':
     process_tournament()
