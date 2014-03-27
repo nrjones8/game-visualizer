@@ -28,19 +28,60 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <p>It's easy to miss games in the NCAA tournament (or any competition for that matter) -- wouldn't it be nice to know what the game "was like?" Was it close or a blowout? Maybe the favorite won by ten points, but was it a tight game before that? The goal here is to </p>
 
-<p>First template. Use Jekyll soon!</p>
+<ol>
+<li>Visualize the trajectory of a game</li>
+<li>Compare the trajectories of one game to another</li>
+<li>Cluster games?</li>
+</ol><h1>
+<a name="scraping-play-by-play-data" class="anchor" href="#scraping-play-by-play-data"><span class="octicon octicon-link"></span></a>Scraping Play by Play Data</h1>
 
-<h3>
-<a name="scraper" class="anchor" href="#scraper"><span class="octicon octicon-link"></span></a>Scraper</h3>
+<p>In order to see plot a game, we need to create a time series of the game -- for any given time in the game, what was the score? ESPN provides play-by-play data for every game (<a href="http://scores.espn.go.com/ncb/playbyplay?gameId=400546936">http://scores.espn.go.com/ncb/playbyplay?gameId=400546936</a>) which we can use to parse out the score at any given time. Using Python's <code>requests</code> and <code>BeautifulSoup</code> libraries make this a whole lot easier! Check out <a href="here">some url</a> to see the full scraper's code -- it outputs a .csv file containing events from all the NCAA tournament games played so far. Each event stores the teams involved, metadata about the teams (their rank), the round number, the time, and scores. Note that we'll be interested in looking at the <em>difference</em> in scores at a given time; since we expect a higher ranked team to be winning, the <code>diff_score</code> variable used throughout is with respect to the higher ranked team, i.e. <code>score of higher ranked team - score of lower ranked team.</code> An example (with header included) of a few events from the Dayton vs. Ohio State game is shown below:</p>
 
-<h3>
-<a name="visualize" class="anchor" href="#visualize"><span class="octicon octicon-link"></span></a>Visualize</h3>
+<pre><code>away,away_rank,away_score,diff_score,game_id,home,home_rank,home_score,rank_diff,round_num,time
+DAY,11,0,2,DAY-OSU,OSU,6,2,5,2,0.517
+DAY,11,0,5,DAY-OSU,OSU,6,5,5,2,1.033
+...
+</code></pre>
 
-<h3>
-<a name="others" class="anchor" href="#others"><span class="octicon octicon-link"></span></a>Others?</h3>
+<h1>
+<a name="analyzing-the-data" class="anchor" href="#analyzing-the-data"><span class="octicon octicon-link"></span></a>Analyzing the Data</h1>
+
+<p>There are a ton of questions you could ask about these data -- do some games follow a similar trajectory? Which games are these? What games seemed most exciting? Before doing any further analysis, let's look into a few ways of visualizing the games.</p>
+
+<p>PUT A NOTE ABOUT DISCRETE/UNIFORM TIME STEPS</p>
+
+<p>As a side note, I really, really wanted to find a Javascript library that made nice interactive plots of these data without much overhead. I know only a little basic JS, and tried messing with a couple of D3 extensions (namely <a href="http://nvd3.org/">NVD3</a> and <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a>), but found them difficult to customize. With more time (and patience!), I'd love to port these kinds of visualizations over to a more interactive platform.</p>
+
+<p>As a dedicated user of R and <a href="http://ggplot2.org/">ggplot2</a>, it made more sense to jump into <a href="https://www.rstudio.com/">RStudio</a> and start playing with the data. </p>
+
+<h2>
+<a name="time-line" class="anchor" href="#time-line"><span class="octicon octicon-link"></span></a>Time Line</h2>
+
+<p>My original thought was simply to plot each game as a line and overlay all the games at once, i.e. put time on the x-axis and score differential on the y-axis (here's where the interactivity of Javascript would be perfect -- simply highlight a specific game and see more details about it, or zoom in on certain time periods). </p>
+
+<ul>
+<li>Can't see individual games!</li>
+<li>Crowded lines </li>
+<li>Messy</li>
+</ul><p>The colors shown on the plot map to the difference in rank between the two teams. Ideally, we could map the color (or some other aesthetic) to an individual game, making it easy to see which line on the plot corresponds to which game. However, once we start looking at more than roughly 6 games, it's difficult to see the difference between colors. So we'd like to incorporate:</p>
+
+<ul>
+<li>Individual games -- what teams are involved?</li>
+<li>"Fairness" of game -- how different are teams' ranks?</li>
+<li>Trajectory of game -- was it close, a blowout, or had sections of each?</li>
+</ul><h1>
+<a name="heatmap" class="anchor" href="#heatmap"><span class="octicon octicon-link"></span></a>Heatmap!</h1>
+
+<p>Which brings us to the heatmap, which is an awesome way to visualize many variables at once. The below heatmap does a much better job of capturing all the above aspects, though it requires a little more explanation. </p>
+
+<ul>
+<li>X-axis is still time</li>
+<li>Each row corresponds to a game (with teams shown on the far left)</li>
+<li>The color of each cell is based on the score differential of the given game at the given time -- blue means the favorite is winning by a lot, red means the underdog is winning by a lot, and closer to white means the game is close. (Note that any lead of over 15 is rounded down, since we'd like the colors to be distinguishable at lower differentials).</li>
+<li>The rows are ordered! As shown on the right side of the map, rows are grouped by the rank differential of the game -- games between teams with a rank differential of 3 are plotted together etc. Thus, in the bottom rows we would expect to see lots of blue (since the higher ranked team is <em>much higher</em> ranked). Any place we see red means an upset -- the lower the red is on the map, the more of an upset it was. </li>
+</ul>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/nrjones8">nrjones8</a></p>
