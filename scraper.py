@@ -184,16 +184,21 @@ def process_one_day(scoreboard_url, round_num, time_intervals=None):
 
     return all_games
 
-def process_tournament(outfile='data/tournament_pbp.csv', time_intervals=None):
+def process_tournament(outfile='data/3_30_tournament_pbp.csv', time_intervals=None):
     march = 20140300
     day_to_round = {
         20 : 2,
         21 : 2,
         22 : 3,
-        23 : 3
+        23 : 3,
+        27 : 4,
+        28 : 4,
+        28 : 4,
+        29 : 5,
+        30 : 5
     }
-    # Looking at March 20 - 23 for the moment
-    days = list(range(20, 24))
+    # Looking at March 20 - 30 for the moment
+    days = day_to_round.keys()
     dates = [march + d for d in days]
 
     # List of dictionaries
@@ -208,7 +213,7 @@ def process_tournament(outfile='data/tournament_pbp.csv', time_intervals=None):
 if __name__ == '__main__':
     # From 0 --> 40.75
     times = [.25 * t for t in range(4 * 41)]
-    
+
     # If no <time_intervals> argument is passed, events will be recorded at actual
     # time in the play by play
     process_tournament(time_intervals=times)
