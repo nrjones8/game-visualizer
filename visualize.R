@@ -70,13 +70,13 @@ nba_heatmap <- function(df, max_score=15) {
   heat <- ggplot(df, aes(time, game_id)) +
     geom_tile(aes(fill = rounded_diff_score), color = 'white') +
     scale_fill_gradient2("Score Differential", low = 'red', high = 'blue') +
-    #facet_grid(rank_diff ~ ., scales = 'free', space = 'free', labeller=rank_diff_label) +
+    facet_grid(rank_diff ~ ., scales = 'free', space = 'free') +
     theme_bw() +
     # Horizontal text on the facet
     theme(strip.text.y = element_text(size = 9, angle = 0)) +
     scale_x_continuous('Time') +
     scale_y_discrete('Teams') +
-    ggtitle('March Madness 2014')
+    ggtitle('NBA Playoffs 2014')
   
   print(heat)
 }
